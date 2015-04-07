@@ -8,6 +8,7 @@
 'use strict';
 
 var changeCase = require('change-case');
+var merge = require('merge');
 var path = require('path');
 
 module.exports = function(grunt) {
@@ -17,14 +18,14 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('konphyg', 'Grunt task to expand a single configuration file into files to be parsed by Konphyg', function() {
 
-    function inputFilename(options, environment) {
-      return path.join(options.src, environment + '.json');
+    function inputFilename(src, environment) {
+      return path.join(src, environment + '.json');
     }
 
-    // outputName = path.join(options.output, changeCase.paramCase(configBlock) + '.' + options.environments[i] + '.json');
-    function outputFilename(options, module, environment) {
+    // outputName = path.join(options.dest, changeCase.paramCase(configBlock) + '.' + options.environments[i] + '.json');
+    function outputFilename(dest, module, environment) {
 
-      var output = path.join(options.output, changeCase.paramCase(module));
+      var output = path.join(dest, changeCase.paramCase(module));
 
       if (environment) {
         output += '.' + environment;
@@ -38,48 +39,74 @@ module.exports = function(grunt) {
 
     options = this.options({
       environments: ['production', 'development', 'test'],
-      output: 'config',
-      indent: 2,
-      src: 'config'
+      indent: 2
     });
+
+    if (!Array.isArray(options.environments)) {
+      options.environments = [ String(options.environments) ];
+    }
+
+    var task = this;
 
     done = this.async();
 
-    for (i = 0; i < options.environments.length; i++) {
+    // process each dest: src pair from config, e.g.
+    // {
+    //   files: {
+    //     dest1: 'src1',
+    //     dest2: 'src2'
+    //   }
+    // }
+    this.files.forEach(function(srcDestPair) {
 
-      file = inputFilename(options, options.environments[i]);
+      srcDestPair.src.forEach(function (srcPath) {
 
-      if (grunt.file.exists(file)) {
-        grunt.verbose.writeln('Reading config for environment `' + options.environments[i] + '` from `' + file + '`');
-        config = grunt.file.readJSON(file);
-      } else {
-        grunt.verbose.writeln('No config for environment `' + options.environments[i] + '` exists; no modules will be written for this environment');
-        config = {};
+        grunt.verbose.writeln('Processing source path `' + srcPath + '`');
 
-        // need to make directory, since may not be created by the loop below
-        if (!grunt.file.isDir(options.output)) {
-          grunt.file.mkdir(options.output);
+        for (i = 0; i < options.environments.length; i++) {
+
+          file = inputFilename(srcPath, options.environments[i]);
+
+          // read config for environment, if it exists
+          if (grunt.file.exists(file)) {
+            grunt.verbose.writeln('Reading config for environment `' + options.environments[i] + '` from `' + file + '`');
+            config = grunt.file.readJSON(file);
+          } else {
+            grunt.verbose.writeln('No config for environment `' + options.environments[i] + '` exists; no modules will be written for this environment');
+            config = {};
+
+            // need to make directory, since may not be created by the loop below
+            if (!grunt.file.isDir(srcDestPair.dest)) {
+              grunt.file.mkdir(srcDestPair.dest);
+            }
+          }
+
+          // merge inline config for environment, if it was specified
+          if ('object' === typeof task.data[options.environments[i]]) {
+            config = merge(config, task.data[options.environments[i]]);
+          }
+
+          // process each config block for this environment
+          for (configBlock in config) {
+            if (!config.hasOwnProperty(configBlock)) {
+              continue;
+            }
+
+            grunt.verbose.writeln('Processing configuration block `' + configBlock + '`');
+
+            configBlockFile = outputFilename(srcDestPair.dest, configBlock);
+            if (!grunt.file.exists(configBlockFile)) {
+              grunt.verbose.writeln('No base configuration file exists for config block `' + configBlock + '`; creating it now');
+              grunt.file.write(configBlockFile, '{}', null, options.indent);
+            }
+
+            outputName = outputFilename(srcDestPair.dest, configBlock, options.environments[i]);
+            grunt.verbose.writeln('Writing output file to `' + outputName + '`');
+            grunt.file.write(outputName, JSON.stringify(config[configBlock], null, options.indent));
+          }
         }
-      }
-
-      for (configBlock in config) {
-        if (!config.hasOwnProperty(configBlock)) {
-          continue;
-        }
-
-        grunt.verbose.writeln('Processing configuration block `' + configBlock + '`');
-
-        configBlockFile = outputFilename(options, configBlock);
-        if (!grunt.file.exists(configBlockFile)) {
-          grunt.verbose.writeln('No base configuration file exists for config block `' + configBlock + '`; creating it now');
-          grunt.file.write(configBlockFile, '{}', null, options.indent);
-        }
-
-        outputName = outputFilename(options, configBlock, options.environments[i]);
-        grunt.verbose.writeln('Writing output file to `' + outputName + '`');
-        grunt.file.write(outputName, JSON.stringify(config[configBlock], null, options.indent));
-      }
-    }
+      });
+    });
 
     done();
   });

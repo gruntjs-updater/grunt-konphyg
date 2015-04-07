@@ -30,23 +30,39 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     konphyg: {
-      options: {
-        output: 'tmp',
-        src: 'test/fixtures'
+      defaultConfig: {
+        files: {
+          'tmp': 'test/fixtures'
+        }
       },
-      defaultConfig: {},
       customEnvironments: {
         options: {
-          output: 'tmp-qa',
-          src: 'test/fixtures',
           environments: ['qa']
+        },
+        files: {
+          'tmp-qa': [ 'test/fixtures' ]
         }
       },
       nonExistentFiles: {
         options: {
-          output: 'tmp-empty',
-          src: 'test/fixtures',
           environments: ['staging']
+        },
+        files: {
+          'tmp-empty': [ 'test/fixtures' ]
+        }
+      },
+      specifyInline: {
+        options: {
+          environments: 'custom'
+        },
+        dest: 'tmp-specify-inline',
+        src: 'test/fixtures',
+        custom: {
+          someModule: {
+            optionA: 'A is OK',
+            optionB: -10323.0123,
+            optionC: false
+          }
         }
       }
     },

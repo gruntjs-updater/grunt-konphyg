@@ -95,5 +95,35 @@ exports.konphyg = {
     test.ok(grunt.file.isDir('tmp-empty/'));
 
     test.done();
+  },
+
+  specifyInline: function (test) {
+    var dir = 'tmp-specify-inline/';
+
+    var modules = [
+      'some-module'
+    ];
+
+    var environments = [
+      'custom'
+    ];
+
+    var i, j, actual, expected;
+
+    test.expect(3 + environments.length);
+
+    for (i = 0; i < modules.length; i++) {
+
+      test.ok(grunt.file.isDir(dir));
+      test.ok(grunt.file.exists(dir + modules[i] + '.json'), 'Default module file should exist for all modules');
+      test.equals(fs.readdirSync(dir).length, 2, 'Only two files should be created for qa environment');
+
+      for (j = 0; j < environments.length; j++) {
+        actual = grunt.file.read(dir + modules[i] + '.' + environments[j] + '.json');
+        expected  = grunt.file.read('test/expected/' + modules[i] + '.' + environments[j] + '.json');
+        test.equal(actual, expected, 'Configuration for module ' + modules[i] + ' is expanded for environment ' + environments[j]);
+      }
+    }
+    test.done();
   }
 };

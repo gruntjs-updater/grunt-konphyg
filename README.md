@@ -55,18 +55,6 @@ Default value: `2`
 
 Number of spaces for indentation for JSON output files
 
-#### options.output
-Type: `String`
-Default value: `'config'`
-
-Where should the expanded configuration files be written
-
-#### options.src
-Type: `String`
-Default value: `'config'`
-
-Where should the environment specific configuration be read from
-
 ### Usage Examples
 
 #### Default Options
