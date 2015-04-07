@@ -1,0 +1,7 @@
+{
+  "moduleA": {
+    "stringA": "A",
+    "number": 3.141592654,
+    "arrayAbc": ["A", "B", "C"]
+  }
+}

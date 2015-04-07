@@ -1,0 +1,9 @@
+{
+  "stringA": "development A",
+  "number": 3.14,
+  "arrayAbc": [
+    "development A",
+    "development B",
+    "development C"
+  ]
+}

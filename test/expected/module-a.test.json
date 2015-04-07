@@ -1,0 +1,9 @@
+{
+  "stringA": "test A",
+  "number": 3,
+  "arrayAbc": [
+    "test A",
+    "test B",
+    "test C"
+  ]
+}

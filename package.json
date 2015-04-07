@@ -1,0 +1,45 @@
+{
+  "name": "grunt-konphyg",
+  "description": "Grunt task to expand a single configuration file into files to be parsed by Konphyg",
+  "version": "0.1.0",
+  "homepage": "https://github.com/matmar10/grunt-konphyg",
+  "author": {
+    "name": "Matthew J. Martin",
+    "email": "matthew.mar10@gmail.com",
+    "url": "http://matmar10.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:matmar10/grunt-konphyg.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matmar10/grunt-konphyg/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/matmar10/grunt-konphyg/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt": "~0.4.5"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "keywords": [
+    "gruntplugin"
+  ],
+  "dependencies": {
+    "change-case": "^2.3.0"
+  }
+}
