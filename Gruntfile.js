@@ -25,7 +25,7 @@ module.exports = function(grunt) {
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp']
+      tests: ['tmp', 'tmp-qa', 'tmp-empty']
     },
 
     // Configuration to be run (and then tested).
@@ -33,6 +33,21 @@ module.exports = function(grunt) {
       options: {
         output: 'tmp',
         src: 'test/fixtures'
+      },
+      defaultConfig: {},
+      customEnvironments: {
+        options: {
+          output: 'tmp-qa',
+          src: 'test/fixtures',
+          environments: ['qa']
+        }
+      },
+      nonExistentFiles: {
+        options: {
+          output: 'tmp-empty',
+          src: 'test/fixtures',
+          environments: ['staging']
+        }
       }
     },
 

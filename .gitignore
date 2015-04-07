@@ -28,3 +28,5 @@ node_modules
 
 # Generated files
 tmp
+tmp-qa
+tmp-empty

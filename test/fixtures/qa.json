@@ -1,0 +1,11 @@
+{
+  "moduleB": {
+    "stringA": "qa A",
+    "number": 3.141592654589,
+    "arrayAbc": [
+      "qa A",
+      "qa B",
+      "qa C"
+    ]
+  }
+}
