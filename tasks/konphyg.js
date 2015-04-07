@@ -35,7 +35,7 @@ module.exports = function(grunt) {
     }
 
     // Merge task-specific and/or target-specific options with these defaults.
-    var options, config, configBlock, done, configBlockFile, file, i, outputName;
+    var options, config, configBlock, configBlockFile, done, file, i, outputName, task;
 
     options = this.options({
       environments: ['production', 'development', 'test'],
@@ -46,8 +46,7 @@ module.exports = function(grunt) {
       options.environments = [ String(options.environments) ];
     }
 
-    var task = this;
-
+    task = this;
     done = this.async();
 
     // process each dest: src pair from config, e.g.
@@ -57,12 +56,15 @@ module.exports = function(grunt) {
     //     dest2: 'src2'
     //   }
     // }
+    // there usually will be only one iteration here
     this.files.forEach(function(srcDestPair) {
 
+      // grunt expands this to is an array, but in reality it is likely to be just one path
       srcDestPair.src.forEach(function (srcPath) {
 
         grunt.verbose.writeln('Processing source path `' + srcPath + '`');
 
+        // process each environment for all source paths
         for (i = 0; i < options.environments.length; i++) {
 
           file = inputFilename(srcPath, options.environments[i]);
@@ -83,8 +85,11 @@ module.exports = function(grunt) {
 
           // merge inline config for environment, if it was specified
           if ('object' === typeof task.data[options.environments[i]]) {
+            grunt.verbose.writeln('Found inline configuration block for environment `' + options.environments[i] + '`; merging it to the existing environment config');
             config = merge(config, task.data[options.environments[i]]);
           }
+
+          grunt.verbose.writeln('Will now process configuration:', config);
 
           // process each config block for this environment
           for (configBlock in config) {
