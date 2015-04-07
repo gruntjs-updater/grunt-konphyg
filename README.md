@@ -58,11 +58,13 @@ Number of spaces for indentation for JSON output files
 ### Usage Examples
 
 #### Default Options
-No options are required by default.
+No options are required by default but at least one target is required.
 
 ```js
 grunt.initConfig({
-  konphyg: {},
+  konphyg: {
+    target: {}
+  },
 });
 ```
 
@@ -74,9 +76,49 @@ grunt.initConfig({
   konphyg: {
     options: {
       environments: ['staging', 'qa'],
-      indent: 4,
-      output: 'config-output',
-      src: 'config-input'
+      indent: 4
+    },
+    target: {
+      files: {
+        'config-output-dir': 'config-input-dir'
+      }
+    }
+  },
+});
+```
+
+#### Inline configuration for an environment
+You can specify your configuration inline. This is especially useful for development configuration.
+
+This example shows specifying different configuration for a `logger` module for production and development.
+
+The following files would be created:
+
+* config-output-dir/logger.json - contains empty object `{}`
+* config-output-dir/logger.development.json - contains `{"level": "debug"}`
+* config-output-dir/logger.production.json - contains `{"level": "info"}`
+* config-output-dir/logger.test.json - contains `{"enabled": false}`
+
+```js
+grunt.initConfig({
+  konphyg: {
+    files: {
+      'config-output-dir': 'config-input-dir'
+    },
+    development: {
+      logger: {
+        level: 'debug'
+      }
+    },
+    production: {
+      logger: {
+        level: 'info'
+      }
+    },
+    test: {
+      logger: {
+        enabled: false
+      }
     }
   },
 });
