@@ -26,58 +26,70 @@ In your project's Gruntfile, add a section named `konphyg` to the data object pa
 grunt.initConfig({
   konphyg: {
     options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
+      output: 'config',
+      src: 'config'
+    }
   },
 });
 ```
 
 ### Options
 
-#### options.separator
+
+#### options.environments
 Type: `String`
-Default value: `',  '`
+Default value: `['development', 'production', 'test']`
 
-A string value that is used to do something with whatever.
+A list of environment files to be expanded when no target is provided to the Grunt task.
+By default, this will read all files from the `src` location in the format:
 
-#### options.punctuation
+- `development.json`
+- `production.json`
+- `test.json`
+
+If you specify a different list, it will be looked up accordingly, e.g. `staging` looks for the file `staging.json`
+
+#### options.indent
 Type: `String`
-Default value: `'.'`
+Default value: `2`
 
-A string value that is used to do something else with whatever else.
+Number of spaces for indentation for JSON output files
+
+#### options.output
+Type: `String`
+Default value: `'config'`
+
+Where should the expanded configuration files be written
+
+#### options.src
+Type: `String`
+Default value: `'config'`
+
+Where should the environment specific configuration be read from
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+No options are required by default.
 
 ```js
 grunt.initConfig({
-  konphyg: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
+  konphyg: {},
 });
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+The following shows the use of all options.
 
 ```js
 grunt.initConfig({
   konphyg: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+      environments: ['staging', 'qa'],
+      indent: 4,
+      output: 'config-output',
+      src: 'config-input'
+    }
   },
 });
 ```
