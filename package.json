@@ -1,7 +1,7 @@
 {
   "name": "grunt-konphyg",
   "description": "Grunt task to expand a single configuration file into files to be parsed by Konphyg",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/matmar10/grunt-konphyg",
   "author": {
     "name": "Matthew J. Martin",
