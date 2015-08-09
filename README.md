@@ -1,5 +1,7 @@
 # grunt-konphyg
 
+[![Build Status](https://travis-ci.org/matmar10/grunt-konphyg.svg?branch=master)](https://travis-ci.org/matmar10/grunt-konphyg)
+
 Grunt task to expand a single configuration file into files to be parsed by Konphyg
 
 ## Getting Started
