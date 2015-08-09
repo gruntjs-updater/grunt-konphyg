@@ -10,6 +10,7 @@
 var changeCase = require('change-case');
 var merge = require('merge');
 var path = require('path');
+var konphyg = require('konphyg');
 
 module.exports = function(grunt) {
 
@@ -35,7 +36,7 @@ module.exports = function(grunt) {
     }
 
     // Merge task-specific and/or target-specific options with these defaults.
-    var options, config, configBlock, configBlockFile, done, file, i, outputName, task;
+    var options, config, configBlockFile, done, file, i, outputName, task;
 
     options = this.options({
       environments: ['production', 'development', 'test'],
@@ -61,6 +62,7 @@ module.exports = function(grunt) {
 
       // grunt expands this to is an array, but in reality it is likely to be just one path
       srcDestPair.src.forEach(function (srcPath) {
+        var configBlock;
 
         grunt.verbose.writeln('Processing source path `' + srcPath + '`');
 
@@ -108,6 +110,9 @@ module.exports = function(grunt) {
             outputName = outputFilename(srcDestPair.dest, configBlock, options.environments[i]);
             grunt.verbose.writeln('Writing output file to `' + outputName + '`');
             grunt.file.write(outputName, JSON.stringify(config[configBlock], null, options.indent));
+
+            // expose the configuration into grunt
+            grunt.config.set(configBlock, konphyg(srcDestPair.dest)(changeCase.paramCase(configBlock)));
           }
         }
       });

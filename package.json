@@ -42,6 +42,7 @@
   "dependencies": {
     "change-case": "^2.3.0",
     "grunt-release": "^0.12.0",
+    "konphyg": "^1.4.0",
     "merge": "^1.2.0"
   }
 }

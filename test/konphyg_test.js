@@ -2,6 +2,7 @@
 
 var grunt = require('grunt');
 var fs = require('fs');
+var changeCase = require('change-case');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -42,7 +43,7 @@ exports.konphyg = {
 
     var i, j, actual, expected;
 
-    test.expect(3 + environments.length);
+    test.expect(3 + (environments.length * 2));
 
     for (i = 0; i < modules.length; i++) {
 
@@ -55,6 +56,7 @@ exports.konphyg = {
         actual = grunt.file.read('tmp/'+ modules[i] + '.' + environments[j] + '.json');
         expected  = grunt.file.read('test/expected/' + modules[i] + '.' + environments[j] + '.json');
         test.equal(actual, expected, 'Configuration for module ' + modules[i] + ' is expanded for environment ' + environments[j]);
+        test.ok(grunt.config.get(changeCase.camelCase(modules[i])), 'Configuration for module ' + changeCase.camelCase(modules[i]) + ' is available via grunt.config');
       }
     }
 
@@ -73,7 +75,7 @@ exports.konphyg = {
 
     var i, j, actual, expected;
 
-    test.expect(3 + environments.length);
+    test.expect(3 + (environments.length * 2));
 
     for (i = 0; i < modules.length; i++) {
 
@@ -85,6 +87,7 @@ exports.konphyg = {
         actual = grunt.file.read('tmp-qa/'+ modules[i] + '.' + environments[j] + '.json');
         expected  = grunt.file.read('test/expected/' + modules[i] + '.' + environments[j] + '.json');
         test.equal(actual, expected, 'Configuration for module ' + modules[i] + ' is expanded for environment ' + environments[j]);
+        test.ok(grunt.config.get(changeCase.camelCase(modules[i])), 'Configuration for module ' + changeCase.camelCase(modules[i]) + ' is available via grunt.config');
       }
     }
     test.done();
@@ -110,7 +113,7 @@ exports.konphyg = {
 
     var i, j, actual, expected;
 
-    test.expect(3 + environments.length);
+    test.expect(3 + (environments.length * 2));
 
     for (i = 0; i < modules.length; i++) {
 
@@ -122,6 +125,7 @@ exports.konphyg = {
         actual = grunt.file.read(dir + modules[i] + '.' + environments[j] + '.json');
         expected  = grunt.file.read('test/expected/' + modules[i] + '.' + environments[j] + '.json');
         test.equal(actual, expected, 'Configuration for module ' + modules[i] + ' is expanded for environment ' + environments[j]);
+        test.ok(grunt.config.get(changeCase.camelCase(modules[i])), 'Configuration for module ' + changeCase.camelCase(modules[i]) + ' is available via grunt.config');
       }
     }
     test.done();
