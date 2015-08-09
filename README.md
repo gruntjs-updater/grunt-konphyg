@@ -136,8 +136,8 @@ grunt.initConfig({
 
 ### 0.4 ###
 
-* 0.4.0
-    * Export all configuration via grunt.config so they can be used in other grunt tags
+* 0.4.1: Add Travis CI; add build status to README
+* 0.4.0: Export all configuration via grunt.config so they can be used in other grunt tags
 
 ### 0.3 ###
 
